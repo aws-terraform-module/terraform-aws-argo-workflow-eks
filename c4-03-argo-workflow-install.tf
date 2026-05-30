@@ -2,8 +2,8 @@
 
 # Resource: Helm Release 
 resource "helm_release" "argo_workflow_release" {
-  depends_on = [aws_iam_role.irsa_iam_role ]            
-  name       = "${lower(local.name)}"
+  depends_on = [aws_iam_role.irsa_iam_role]
+  name       = lower(local.name)
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-workflows"
@@ -17,7 +17,7 @@ resource "helm_release" "argo_workflow_release" {
 
   set {
     name  = "controller.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = "${aws_iam_role.irsa_iam_role.arn}"
+    value = aws_iam_role.irsa_iam_role.arn
   }
 
   set {
@@ -30,7 +30,7 @@ resource "helm_release" "argo_workflow_release" {
   }
   set {
     name  = "server.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = "${aws_iam_role.irsa_iam_role.arn}"
+    value = aws_iam_role.irsa_iam_role.arn
   }
   set {
     name  = "server.extraArgs[0]"
@@ -50,7 +50,7 @@ resource "helm_release" "argo_workflow_release" {
   }
   set {
     name  = "artifactRepository.s3.bucket"
-    value = "${lower(local.name)}"
+    value = lower(local.name)
   }
   set {
     name  = "artifactRepository.s3.endpoint"
@@ -64,5 +64,5 @@ resource "helm_release" "argo_workflow_release" {
     name  = "artifactRepository.s3.useSDKCreds"
     value = "true"
   }
-   
+
 }
