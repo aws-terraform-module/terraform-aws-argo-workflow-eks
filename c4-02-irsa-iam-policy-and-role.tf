@@ -12,25 +12,25 @@ resource "aws_iam_policy" "irsa_iam_policy" {
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListBucket",
-                "s3:GetBucketLocation"
-            ],
-            "Resource": "arn:aws:s3:::${local.name}"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject",
-                "s3:DeleteObject"
-            ],
-            "Resource": "arn:aws:s3:::${local.name}/*"
-        }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
+        ],
+        "Resource" : "arn:aws:s3:::${local.name}"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ],
+        "Resource" : "arn:aws:s3:::${local.name}/*"
+      }
     ]
   })
 }
@@ -54,10 +54,10 @@ resource "aws_iam_role" "irsa_iam_role" {
           Federated = "${var.aws_iam_openid_connect_provider_arn}"
         }
         Condition = {
-          StringLike = {            
-            "${local.aws_iam_openid_connect_provider_extract_from_arn}:sub": "system:serviceaccount:argo-workflow:${local.name}-argo-workflows-*"
+          StringLike = {
+            "${local.aws_iam_openid_connect_provider_extract_from_arn}:sub" : "system:serviceaccount:argo-workflow:${local.name}-argo-workflows-*"
           }
-        }        
+        }
 
       },
     ]
@@ -70,11 +70,11 @@ resource "aws_iam_role" "irsa_iam_role" {
 
 # Associate IAM Role and Policy
 resource "aws_iam_role_policy_attachment" "irsa_iam_role_policy_attach" {
-  policy_arn = aws_iam_policy.irsa_iam_policy.arn 
+  policy_arn = aws_iam_policy.irsa_iam_policy.arn
   role       = aws_iam_role.irsa_iam_role.name
 }
 
 output "irsa_iam_role_arn" {
   description = "IRSA Demo IAM Role ARN"
-  value = aws_iam_role.irsa_iam_role.arn
+  value       = aws_iam_role.irsa_iam_role.arn
 }
